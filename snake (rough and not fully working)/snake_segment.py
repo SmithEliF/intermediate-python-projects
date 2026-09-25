@@ -5,6 +5,8 @@ class Segment:
     def __init__(self):
         pass
 
+# Build the snake segments
+
     def new_segment(self):
         self.snake_segment = Turtle()
         self.snake_segment.color("white")
