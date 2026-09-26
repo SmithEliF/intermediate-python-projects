@@ -68,6 +68,12 @@ class GameLogic:
             for i in range(len(self.segments) - 1, 0, -1):
                 self.segments[i].goto(self.segments[i - 1].pos())
 
+                
+# -1 selects the last segment in the list and gets the last tail position before the snake moves 
+# so that the next added segment can replace it
+
+            previous_tail_position = self.segments[-1].pos()
+
 # Move the head of the snake forward
 
             self.segments[0].fd(20)
@@ -89,10 +95,6 @@ class GameLogic:
 # Add a new segment
 
                 new_segment = self.segment.new_segment()
-                
-                # -1 selects the last segment in the list and gets the last tail position
-
-                previous_tail_position = self.segments[-1].pos()
                 new_segment.goto(previous_tail_position)
                 self.segments.append(new_segment)
                     
