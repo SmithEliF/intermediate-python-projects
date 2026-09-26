@@ -14,6 +14,8 @@ class Screen:
         self.screen.setup(800, 600)
         self.screen.title("pong")
 
-        self.screen.exitonclick()
-
         return self.screen
+
+    def exit_on_click(self):
+            
+        self.screen.exitonclick()
