@@ -24,9 +24,15 @@ class GameLogic:
         self.segments = []
         self.apples = []
 
+    def on_apple(self):
+
+# Return if the snake head is on an apple
+
+        return bool(self.apples) and self.segments[0].distance(self.apples[0]) < 15
+
     def game_over(self):
 
-# If any segment of the snake has an x or y coordinate at or beyond 300 it ends the game
+# Return if any segment of the snake has an x or y coordinate at or beyond 300
 
         return any(abs(segment.xcor()) >= 300 or abs(segment.ycor()) >= 300 for segment in self.segments)
 
@@ -44,33 +50,56 @@ class GameLogic:
 
         self.screen.update()
 
-        while True:
-            for num in range(len(self.segments), 0, -1):
-                num = num - 1
-                self.movement = Movement(self.segments, self.screen)
-                self.segments[num].fd(20)
-                self.screen.onkey(self.movement.up, "w")
-                self.screen.onkey(self.movement.down, "s")
-                self.screen.onkey(self.movement.left, "a")
-                self.screen.onkey(self.movement.right, "d")
 
 # If apple doesnt exist create one
 
-            if len(self.apples) == 0:
-                self.apple = self.apple_create.new_apple()
-                self.apples.append(self.apple)
+        if len(self.apples) == 0:
+            self.apple = self.apple_create.new_apple()
+            self.apples.append(self.apple)
+
+        while True:
+
+# Move the snake forward
+
+            self.movement = Movement(self.segments, self.screen)
+
+# Move each segment of the snake to the one ahead of it
+
+            for i in range(len(self.segments) - 1, 0, -1):
+                self.segments[i].goto(self.segments[i - 1].pos())
+
+# Move the head of the snake forward
+
+            self.segments[0].fd(20)
 
 # Remove apple if it comes in contact with snake
 
-            if self.segments[0].pos() == self.apples[len(self.apples)-1].pos():
+            if self.on_apple():
+
+# Remove the previous apple
+
                 self.apple.hideturtle()
                 self.apples.pop(0)
+
+# Create a new apple
+
+                self.apple = self.apple_create.new_apple()
+                self.apples.append(self.apple)
+
+# Add a new segment
+
                 new_segment = self.segment.new_segment()
-                new_segment.goto(self.segments[-1].pos())
-                new_segment.setheading(self.segments[-1].heading() + 180)
-                new_segment.forward(20)
-                new_segment.setheading(self.segments[-1].heading())
+                
+                # -1 selects the last segment in the list and gets the last tail position
+
+                previous_tail_position = self.segments[-1].pos()
+                new_segment.goto(previous_tail_position)
                 self.segments.append(new_segment)
+                    
+            self.screen.onkey(self.movement.up, "w")
+            self.screen.onkey(self.movement.down, "s")
+            self.screen.onkey(self.movement.left, "a")
+            self.screen.onkey(self.movement.right, "d")
 
 # Game over conditions
 
