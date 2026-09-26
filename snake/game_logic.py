@@ -1,7 +1,7 @@
 from snake_movement import Movement
 from snake_segment import Segment
 from apple import Apple
-from turtle import Screen
+from turtle import Screen, TK
 from time import sleep
 
 class GameLogic:
@@ -23,6 +23,7 @@ class GameLogic:
         self.apple_create = Apple()
         self.segments = []
         self.apples = []
+        self.score = 0
 
     def on_apple(self):
 
@@ -82,6 +83,10 @@ class GameLogic:
 
             if self.on_apple():
 
+# Add score
+
+                self.score += 1
+
 # Remove the previous apple
 
                 self.apple.hideturtle()
@@ -106,10 +111,12 @@ class GameLogic:
 # Game over conditions
 
             if self.game_over():
+                TK.messagebox.showinfo(title="Outcome:", message="You got a score of: " + str(self.score))
                 self.screen.bye()
                 break
             for i in range(len(self.segments)-1, 0, -1):
                 if self.segments[0].distance(self.segments[i]) < 10:
+                    TK.messagebox.showinfo(title="Outcome:", message="You got a score of: " + str(self.score))
                     self.screen.bye()
                     break
 
