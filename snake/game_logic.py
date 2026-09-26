@@ -28,7 +28,7 @@ class GameLogic:
 
 # Return if the snake head is on an apple
 
-        return bool(self.apples) and self.segments[0].distance(self.apples[0]) < 15
+        return self.segments[0].distance(self.apples[0]) < 15
 
     def game_over(self):
 
@@ -109,7 +109,7 @@ class GameLogic:
                 self.screen.bye()
                 break
             for i in range(len(self.segments)-1, 0, -1):
-                if self.segments[0].pos() == self.segments[i].pos():
+                if self.segments[0].distance(self.segments[i]) < 10:
                     self.screen.bye()
                     break
 
